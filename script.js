@@ -49,6 +49,7 @@ function createCharacterCard(character) {
 	characterItem.classList.add("character-item");
 
 	const characterName = document.createElement("h2");
+	characterName.classList.add("name");
 	characterName.textContent = name;
 
 	const characterImage = document.createElement("img");
@@ -59,8 +60,8 @@ function createCharacterCard(character) {
 	characterKi.classList.add("ki");
 	characterKi.textContent = `Ki: ${ki}`;
 
-	characterItem.appendChild(characterName);
 	characterItem.appendChild(characterImage);
+	characterItem.appendChild(characterName);
 	characterItem.appendChild(characterKi);
 
 	card.appendChild(characterItem);

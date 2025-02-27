@@ -10,6 +10,19 @@ header {
 	justify-content: center;
 	align-items: center;
 }
+.dragon {
+	color: rgb(245, 213, 5);
+}
+.ball {
+	color: red;
+}
+
+input {
+	border-radius: 8px;
+	padding: 8px;
+	margin: 8px;
+	border: 1px #ff6f00 solid;
+}
 
 #character-list {
 	display: flex;
@@ -28,7 +41,7 @@ h1 {
 }
 
 .character-card {
-	border: 1px solid #ccc;
+	border: 1px solid #ff6f00;
 	border-radius: 8px;
 	padding: 16px;
 	margin: 16px;
@@ -57,8 +70,17 @@ img:hover {
 }
 .ki {
 	color: red;
+	font-family: "Saiyan Sans", sans-serif;
 }
-/* styles.css */
+
+.name {
+	font-family: "Saiyan Sans", sans-serif;
+	cfont-size: 72px;
+	background: -webkit-linear-gradient(#ffe100, #ff0000);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	-webkit-text-stroke: 0.1px black;
+}
 .skeleton-card {
 	background: #e0e0e0;
 	border-radius: 8px;

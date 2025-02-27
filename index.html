@@ -4,25 +4,35 @@
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>DBZ</title>
+		<link
+			rel="icon"
+			href="./images/icons/ball-icon.png"
+			type="image/x-icon"
+		/>
 		<link rel="stylesheet" href="styles.css" />
 		<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
 	</head>
 	<body>
 		<header>
-			<h1>DragonBallZ</h1>
+			<h1>
+				<span class="dragon">Dragon</span
+				><span class="ball">Ball</span>Z
+			</h1>
 			<input
 				type="text"
 				id="search-input"
 				placeholder="Buscar personaje..."
 			/>
-			<button onclick="searchCharacter()">Buscar</button>
 		</header>
-		<section id="character-list"></section>
+		<div>
+			<aside class="filters"></aside>
+			<section id="character-list"></section>
+		</div>
 		<div class="pagination">
 			<button id="prev-page" onclick="prevPage()">Anterior</button>
 			<button id="next-page" onclick="nextPage()">Siguiente</button>
 		</div>
-		<div id="transformations-list"></div>
+
 		<script src="script.js"></script>
 	</body>
 </html>
