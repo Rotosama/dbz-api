@@ -5,8 +5,13 @@ searchInput.addEventListener("input", searchCharacter);
 let currentPage = 1;
 let totalPages = 1;
 let links = {};
+let meta = {};
+let races = [];
+let gender = [];
+let afiliations = [];
 
 fetchAllCharacters();
+createFilters();
 
 async function fetchAllCharacters(
 	pageUrl = `${URL}characters?page=1&limit=10`
@@ -28,16 +33,13 @@ async function fetchAllCharacters(
 		characters.forEach((character) => {
 			const card = createCharacterCard(character);
 			characterList.appendChild(card);
-			card.addEventListener("click", () =>
-				showTransformations(character.id)
-			);
+			card.addEventListener("click", () => showInfo(character.id));
 		});
 
 		updatePaginationButtons();
 	} catch (error) {
 		console.error("Error fetching characters:", error);
 	} finally {
-		hideLoadingSkeleton();
 	}
 }
 
@@ -68,7 +70,7 @@ function createCharacterCard(character) {
 	return card;
 }
 
-async function showTransformations(characterId) {
+async function showInfo(characterId) {
 	try {
 		const response = await fetch(
 			`https://dragonball-api.com/api/characters/${characterId}`
@@ -111,8 +113,17 @@ function updatePaginationButtons() {
 	const prevButton = document.getElementById("prev-page");
 	const nextButton = document.getElementById("next-page");
 
-	prevButton.disabled = !links.previous;
-	nextButton.disabled = !links.next;
+	if (links.previous) {
+		prevButton.disabled = false;
+	} else {
+		prevButton.disabled = true;
+	}
+
+	if (links.next) {
+		nextButton.disabled = false;
+	} else {
+		nextButton.disabled = true;
+	}
 }
 
 function prevPage() {
@@ -157,8 +168,119 @@ function showLoadingSkeleton() {
 		characterList.appendChild(skeletonCard);
 	}
 }
+async function createFilters() {
+	const response = await fetch(`${URL}characters?limit=1000`);
+	const data = await response.json();
+	const characters = data.items;
+	characters.forEach((char) => {
+		if (char.race) {
+			races.push(char.race);
+		}
+		if (char.affiliation) {
+			afiliations.push(char.affiliation);
+		}
+		if (char.gender) {
+			gender.push(char.gender);
+		}
+	});
 
-function hideLoadingSkeleton() {
-	const characterList = document.getElementsById("character-card");
+	races = [...new Set(races)];
+	afiliations = [...new Set(afiliations)];
+	gender = [...new Set(gender)];
+
+	console.log(races);
+	console.log(afiliations);
+	console.log(gender);
+
+	const filters = document.getElementById("filters");
+	const raceFilter = document.createElement("div");
+	raceFilter.innerHTML = "<h3>Raza</h3>";
+	races.forEach((race) => {
+		console.log(race);
+		let containerFilter = document.createElement("div");
+		let filterName = document.createElement("input");
+		filterName.type = "checkbox";
+		filterName.name = `${race}`;
+		filterName.id = `${race}`;
+		let filterLabel = document.createElement("label");
+		filterLabel.setAttribute("for", `${race}`);
+		filterLabel.innerText = `${race}`;
+		filterName.addEventListener("change", (e) => {
+			if (e.target.checked) {
+				applyFilters("race=" + race);
+			} else fetchAllCharacters();
+
+			console.log(e);
+		});
+		containerFilter.appendChild(filterName);
+		containerFilter.appendChild(filterLabel);
+		raceFilter.appendChild(containerFilter);
+
+		filters.appendChild(raceFilter);
+	});
+
+	const affiliationFilter = document.createElement("div");
+	affiliationFilter.innerHTML = "<h3>Afiliación</h3>";
+	afiliations.forEach((afiliation) => {
+		console.log(afiliation);
+		let containerFilter = document.createElement("div");
+
+		let filterName = document.createElement("input");
+		filterName.type = "checkbox";
+		filterName.name = `${afiliation}`;
+		let filterLabel = document.createElement("label");
+		filterLabel.setAttribute("for", `${afiliation}`);
+		filterLabel.innerText = `${afiliation}`;
+		filterName.addEventListener("change", (e) => {
+			if (e.target.checked) {
+				applyFilters("affiliation=" + afiliation);
+			} else fetchAllCharacters();
+
+			console.log(e);
+		});
+		containerFilter.appendChild(filterName);
+		containerFilter.appendChild(filterLabel);
+		affiliationFilter.appendChild(containerFilter);
+
+		filters.appendChild(affiliationFilter);
+	});
+
+	const genderFilter = document.createElement("div");
+	genderFilter.innerHTML = "<h3>Género</h3>";
+	gender.forEach((gen) => {
+		console.log(gen);
+		let containerFilter = document.createElement("div");
+		let filterName = document.createElement("input");
+		filterName.type = "checkbox";
+		filterName.name = `${gen}`;
+		let filterLabel = document.createElement("label");
+		filterLabel.setAttribute("for", `${gen}`);
+		filterLabel.innerText = `${gen}`;
+		filterName.addEventListener("change", (e) => {
+			if (e.target.checked) {
+				applyFilters("gender=" + gen);
+			} else {
+				fetchAllCharacters();
+			}
+			console.log(e);
+		});
+		containerFilter.appendChild(filterName);
+		containerFilter.appendChild(filterLabel);
+		genderFilter.appendChild(containerFilter);
+	});
+	filters.appendChild(genderFilter);
+}
+
+async function applyFilters(filter) {
+	const query = `${URL}characters?${filter}`;
+	const response = await fetch(query);
+	const data = await response.json();
+	const characterList = document.getElementById("character-list");
 	characterList.innerHTML = "";
+	data.forEach((char) => {
+		let card = createCharacterCard(char);
+		characterList.appendChild(card);
+	});
+
+	console.log(data);
 }
