@@ -33,7 +33,6 @@ async function fetchAllCharacters(
 		characters.forEach((character) => {
 			const card = createCharacterCard(character);
 			characterList.appendChild(card);
-			card.addEventListener("click", () => showInfo(character.id));
 		});
 
 		updatePaginationButtons();
@@ -67,7 +66,18 @@ function createCharacterCard(character) {
 	characterItem.appendChild(characterKi);
 
 	card.appendChild(characterItem);
+	card.addEventListener("click", () => showInfo(character.id));
 	return card;
+}
+
+function showTransformations(transformations) {
+	const modalContent = document.getElementById("modal-character-info");
+	modalContent.innerHTML = "<h2>Transformaciones</h2>";
+
+	transformations.forEach((transformation) => {
+		let card = createCharacterCard(transformation);
+		modalContent.appendChild(card);
+	});
 }
 
 async function showInfo(characterId) {
@@ -77,8 +87,43 @@ async function showInfo(characterId) {
 		);
 		const data = await response.json();
 		console.log(data);
+
+		// Populate modal with character info
+		const modalContent = document.getElementById("modal-character-info");
+		modalContent.innerHTML = `
+            <h2 class="dbtext">${data.name}</h2>
+            <p class="dbtext">${data.affiliation}</p>
+            <p>Planeta <span class="planet-text">${data.originPlanet.name}<span></p>
+			<img src="${data.originPlanet.image}" alt="${data.name}">
+
+			<p>${data.description}</p>
+        `;
+		if (data.transformations && data.transformations.length > 0) {
+			const transformationsButton = document.createElement("button");
+			transformationsButton.textContent = "Transformaciones";
+			transformationsButton.onclick = () =>
+				showTransformations(data.transformations);
+			modalContent.appendChild(transformationsButton);
+		}
+
+		// Show the modal
+		const modal = document.getElementById("character-modal");
+		modal.style.display = "flex";
+
+		// Close the modal when the user clicks on <span> (x)
+		const closeButton = document.querySelector(".close-button");
+		closeButton.onclick = function () {
+			modal.style.display = "none";
+		};
+
+		// Close the modal when the user clicks anywhere outside of the modal
+		window.onclick = function (event) {
+			if (event.target == modal) {
+				modal.style.display = "none";
+			}
+		};
 	} catch (error) {
-		console.error("Error fetching transformations:", error);
+		console.error("Error fetching character info:", error);
 	}
 }
 
@@ -281,6 +326,4 @@ async function applyFilters(filter) {
 		let card = createCharacterCard(char);
 		characterList.appendChild(card);
 	});
-
-	console.log(data);
 }

@@ -14,10 +14,10 @@
 	</head>
 	<body>
 		<header>
-			<h1>
-				<span class="dragon">Dragon</span
-				><span class="ball">Ball</span>Z
-			</h1>
+			<img
+				src="https://web.dragonball-api.com/images-compress/logo_dragonballapi.webp"
+				alt=""
+			/>
 			<input
 				type="text"
 				id="search-input"
@@ -31,6 +31,12 @@
 		<div class="pagination">
 			<button id="prev-page" onclick="prevPage()">Anterior</button>
 			<button id="next-page" onclick="nextPage()">Siguiente</button>
+		</div>
+		<div id="character-modal" class="modal">
+			<div class="modal-content">
+				<span class="close-button">&times;</span>
+				<div id="modal-character-info"></div>
+			</div>
 		</div>
 		<script src="script.js"></script>
 	</body>
