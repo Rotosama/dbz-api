@@ -239,7 +239,7 @@ async function createFilters() {
 
 	const filters = document.getElementById("filters");
 	const raceFilter = document.createElement("div");
-	raceFilter.innerHTML = "<h3>Raza</h3>";
+	raceFilter.innerHTML = "<h3 class='dbtext'>Raza</h3>";
 	races.forEach((race) => {
 		console.log(race);
 		let containerFilter = document.createElement("div");
@@ -265,7 +265,7 @@ async function createFilters() {
 	});
 
 	const affiliationFilter = document.createElement("div");
-	affiliationFilter.innerHTML = "<h3>Afiliación</h3>";
+	affiliationFilter.innerHTML = "<h3 class='dbtext'>Afiliación</h3>";
 	afiliations.forEach((afiliation) => {
 		console.log(afiliation);
 		let containerFilter = document.createElement("div");
@@ -291,7 +291,7 @@ async function createFilters() {
 	});
 
 	const genderFilter = document.createElement("div");
-	genderFilter.innerHTML = "<h3>Género</h3>";
+	genderFilter.innerHTML = "<h3 class='dbtext'>Género</h3>";
 	gender.forEach((gen) => {
 		console.log(gen);
 		let containerFilter = document.createElement("div");
